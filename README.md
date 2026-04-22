@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claude Code Trivia
 
-## Getting Started
+Quiz web de Verdadeiro/Falso em pt-BR sobre o **Claude Code** — CLI oficial da Anthropic para desenvolvimento agêntico no terminal. Aprenda sobre capacidades, setup, comandos, Hooks, MCP e SDK de forma gamificada, com feedback imediato e explicações didáticas.
 
-First, run the development server:
+## Demo
+
+- **Home:** escolha de categoria + nível
+- **Quiz:** 10 perguntas sequenciais com timer de 30s
+- **Resultado:** pontuação, % de acerto, rating e compartilhamento
+- **Histórico:** últimas sessões salvas em `localStorage`
+
+## Funcionalidades
+
+- 4 categorias: **Negócio**, **Setup**, **Comandos & Hooks**, **MCP & SDK**
+- 4 níveis de dificuldade: **Iniciante**, **Intermediário**, **Avançado**, **Expert**
+- 10 perguntas sorteadas aleatoriamente por sessão, sem repetição
+- Timer de 30s por pergunta (pausa durante a explicação)
+- Explicação didática após cada resposta, com link para documentação oficial quando disponível
+- Pontuação com bônus por rapidez:
+  - `+10` pts por acerto
+  - `+15` pts se acertar em menos de 10s
+  - `0` pts se errar ou o timer expirar
+- Rating final baseado em % de acertos (Iniciante → Mestre do Claude Code)
+- Compartilhamento via Web Share API com fallback para clipboard
+- Histórico persistido em `localStorage` (últimas 50 sessões)
+- Navegação por teclado: **V** (Verdadeiro), **F** (Falso), **Enter/→** (Próxima)
+
+## Stack
+
+| Camada | Tecnologia |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Linguagem | TypeScript 5 |
+| Estilo | Tailwind CSS 4 |
+| Testes | Vitest + Testing Library |
+| Persistência | localStorage |
+
+## Começando
+
+Pré-requisitos: **Node.js 20+** e **npm**.
 
 ```bash
+# instalar dependências
+npm install
+
+# subir o dev server em http://localhost:3000
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev          # dev server
+npm run build        # build de produção
+npm run start        # servir build de produção
+npm run lint         # ESLint
+npm run test         # roda a suíte de testes
+npm run test:watch   # testes em modo watch
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura
 
-## Learn More
+```
+quiz/
+├── app/
+│   ├── page.tsx              # seleção de categoria + nível
+│   ├── quiz/page.tsx         # tela de perguntas
+│   ├── result/page.tsx       # resultado final
+│   └── history/page.tsx      # histórico local
+├── components/               # UI (QuestionCard, Timer, ProgressBar, ...)
+├── lib/
+│   ├── types.ts              # tipos compartilhados
+│   ├── questions.ts          # pool de 40 perguntas seed
+│   ├── quizEngine.ts         # sorteio, pontuação, rating
+│   └── storage.ts            # wrapper localStorage
+├── prd.md                    # especificação completa do produto
+└── CLAUDE.md                 # guia para Claude Code
+```
 
-To learn more about Next.js, take a look at the following resources:
+A camada de domínio em [lib/](lib/) não possui dependências de UI — toda a lógica de negócio vive ali e é testável de forma isolada.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Paleta inspirada na marca Claude:
 
-## Deploy on Vercel
+| Uso | Cor |
+|---|---|
+| Background | `#F5F1EB` (cream) |
+| Accent | `#CC785C` (laranja Claude) |
+| Texto | `#1F1E1D` |
+| Sucesso | `#4A7C59` |
+| Erro | `#B84A4A` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Tipografia: **Inter** (UI) + **JetBrains Mono** (snippets em explicações).
+Layout mobile-first com `max-width: 640px`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Regras de pontuação
+
+| Situação | Pontos |
+|---|---|
+| Acerto | +10 |
+| Acerto em < 10s | +15 (10 + bônus de 5) |
+| Erro ou timer expirado | 0 |
+
+Pontuação máxima por sessão: **150 pontos** (10 × 15).
+
+### Rating final
+
+| % acertos | Rating |
+|---|---|
+| 0–40% | Iniciante — Bora estudar! |
+| 41–70% | Conhecedor — Continue praticando! |
+| 71–90% | Expert — Muito bom! |
+| 91–100% | Mestre do Claude Code 🏆 |
+
+## Roadmap
+
+- [x] Fluxo completo home → quiz → resultado → histórico
+- [x] 40 perguntas seed distribuídas em 4 categorias × 4 níveis
+- [x] Persistência local e compartilhamento
+- [ ] Ranking global com Supabase
+- [ ] Autenticação (GitHub/Google)
+- [ ] Multi-idioma (en-US)
+- [ ] Painel admin para editar perguntas
+- [ ] Expansão do pool para 100+ perguntas
+
+A especificação completa está em [prd.md](prd.md).
+
+## Contribuindo
+
+Contribuições são bem-vindas — especialmente **novas perguntas**! Ao sugerir uma pergunta:
+
+1. Garanta que é **factualmente correta** (consulte https://docs.claude.com/en/docs/claude-code quando houver dúvida)
+2. Inclua `explanation` didática e, quando possível, `docUrl` apontando para documentação oficial
+3. Respeite a distribuição sugerida por nível dentro de cada categoria
+
+Antes de abrir um PR:
+
+```bash
+npm run lint
+npm run test
+npm run build
+```
+
+## Licença
+
+MIT.
