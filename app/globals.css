@@ -1,26 +1,25 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Claude brand palette */
+  --color-cream: #F5F1EB;
+  --color-claude: #CC785C;
+  --color-claude-dark: #A85C42;
+  --color-ink: #1F1E1D;
+  --color-success: #4A7C59;
+  --color-danger: #B84A4A;
+
+  /* Fonts */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #F5F1EB;
+  color: #1F1E1D;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
