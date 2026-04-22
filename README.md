@@ -113,18 +113,6 @@ Pontuação máxima por sessão: **150 pontos** (10 × 15).
 | 71–90% | Expert — Muito bom! |
 | 91–100% | Mestre do Claude Code 🏆 |
 
-## Roadmap
-
-- [x] Fluxo completo home → quiz → resultado → histórico
-- [x] 40 perguntas seed distribuídas em 4 categorias × 4 níveis
-- [x] Persistência local e compartilhamento
-- [ ] Ranking global com Supabase
-- [ ] Autenticação (GitHub/Google)
-- [ ] Multi-idioma (en-US)
-- [ ] Painel admin para editar perguntas
-- [ ] Expansão do pool para 100+ perguntas
-
-A especificação completa está em [prd.md](prd.md).
 
 ## Contribuindo
 
